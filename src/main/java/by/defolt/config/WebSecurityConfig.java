@@ -1,5 +1,6 @@
 package by.defolt.config;
 
+import by.defolt.authentication.service.ClientDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -17,24 +18,26 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+
     @Autowired
-    private UserDetailsService userDetailsService;
+    private ClientDetailService clientDetailService;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService)
+        auth.userDetailsService(clientDetailService)
            .passwordEncoder(bCryptPasswordEncoder);
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-       /* http
+        http
                 .authorizeRequests()
                     .antMatchers("/signIn").permitAll()
                     .antMatchers("/index").permitAll()
+                    .antMatchers("/infoClients").permitAll()
                     .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                     .antMatchers("/signUp").permitAll()
                     .antMatchers("/activation").permitAll()
@@ -44,7 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .formLogin()
                     .loginPage("/signIn").permitAll()
 //                    .failureUrl("/signIn?error=true")
-                    .defaultSuccessUrl("/index", true)
+                    .defaultSuccessUrl("/infoClients", true)
 //                    .usernameParameter("user_name")
 //                    .passwordParameter("password")
                 .and()
@@ -53,7 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .logoutSuccessUrl("/")
                 .and()
                     .exceptionHandling().accessDeniedPage("/403");
-    */}
+    }
 
 
 

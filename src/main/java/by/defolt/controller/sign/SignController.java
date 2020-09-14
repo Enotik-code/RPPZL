@@ -55,20 +55,20 @@ public class SignController {
                 .password(password)
                 .build();
         if (client != null) {
-            mod.addObject("userNameMessage", "User with the same name already exists!");
+            mod.addObject("successRegistration", "User with the same name already exists!");
             return mod;
         }
         if (!confPassword.isPresent() || !newClient.getPassword().equals(confPassword.get())) {
-            mod.addObject("confPasswordMessage", "Password mismatch.");
+            mod.addObject("successRegistration", "Password mismatch.");
         }
         if (!UserValidate.validateFirstName(newClient.getFirstName())) {
-            mod.addObject("firstNameMessage", "Enter a name of more than 3 characters.");
+            mod.addObject("successRegistration", "Enter a name of more than 3 characters.");
         }
         if (!UserValidate.validateLastName(newClient.getLastName())) {
-            mod.addObject("lastNameMessage", "Enter the last name more than 3 characters.");
+            mod.addObject("successRegistration", "Enter the last name more than 3 characters.");
         }
         if (!UserValidate.validatePassword(newClient.getPassword())) {
-            mod.addObject("passwordMessage", "Create a password with more than 8 characters.");
+            mod.addObject("successRegistration", "Create a password with more than 8 characters.");
         }
         if (UserValidate.checkValidateDataUser(newClient) &&
                 (!confPassword.isPresent() || newClient.getPassword().equals(confPassword.get()))) {

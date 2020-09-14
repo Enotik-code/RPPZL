@@ -1,6 +1,5 @@
 package by.defolt.authentication.service;
 
-
 import by.defolt.authentication.bean.Client;
 import by.defolt.authentication.bean.Role;
 import org.springframework.beans.factory.annotation.Autowired;

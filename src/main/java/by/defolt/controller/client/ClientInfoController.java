@@ -6,6 +6,7 @@ import by.defolt.authentication.service.ClientService;
 import by.defolt.consts.SuccessConstants;
 import by.defolt.dao.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.text.ParseException;
+import java.util.Date;
 
 @Controller
 public class ClientInfoController {
@@ -41,6 +43,9 @@ public class ClientInfoController {
     @Autowired
     private DisabilityRepository disabilityRepository;
 
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private Date birthdateDateTimeFormat;
+
     @GetMapping(value = "/additionalInfo")
     public ModelAndView updateUserInfo() {
         ModelAndView modelAndView = new ModelAndView("client/operationClient");
@@ -50,7 +55,11 @@ public class ClientInfoController {
         modelAndView.addObject("cityOfResidence", cityOfResidenceRepository.findAll());
         modelAndView.addObject("maritalStatus", maritalStatusRepository.findAll());
         modelAndView.addObject("disability", disabilityRepository.findAll());
-        modelAndView.addObject("client", clientService.findUserByUserName("yqpuss"));
+        modelAndView.addObject("client", clientService.findUserByUserName(clientService.getCurrentUsername()));
+        System.out.println(clientService.findUserByUserName("yqpuss").getDateOfBirthday());
+        modelAndView.addObject("disabilityHaving", (clientRepository.findClientByUserName(clientService.getCurrentUsername())).getIdDisability().equals(1L));
+        modelAndView.addObject("retireeHaving", (clientRepository.findClientByUserName(clientService.getCurrentUsername())).getRetiree().equals(true));
+        modelAndView.addObject("liableHaving", (clientRepository.findClientByUserName(clientService.getCurrentUsername())).getLiableForMilitaryService().equals(true));
         return modelAndView;
     }
 
@@ -63,16 +72,16 @@ public class ClientInfoController {
                                    @RequestParam(value = "input_address", required = false) String address,
                                    @RequestParam(value = "input_birthday", required = false) String birthday,
                                    @RequestParam(value = "input_gender", required = false) String gender) throws ParseException {
-        ModelAndView mod = new ModelAndView("client/operationClient");
-        mod.addObject(SuccessConstants.IS_AUTHENTICATED, clientAccessService.isCurrentUserAuthenticated());
-        return new ModelAndView("redirect:/additionalInfo");
+        ModelAndView modelAndView = new ModelAndView("client/operationClient");
+        modelAndView.addObject(SuccessConstants.IS_AUTHENTICATED, clientAccessService.isCurrentUserAuthenticated());
+        return new ModelAndView("redirect:/infoClients");
     }
 
     @GetMapping(value = "/infoClients")
     public ModelAndView infoClients(){
-        ModelAndView mod = new ModelAndView("client/infoClient");
-        //mod.addObject(SuccessConstants.IS_AUTHENTICATED, clientAccessService.isCurrentUserAuthenticated());
-        mod.addObject("client", clientRepository.findAll());
-        return mod;
+        ModelAndView modelAndView = new ModelAndView("client/infoClient");
+        modelAndView.addObject(SuccessConstants.IS_AUTHENTICATED, clientAccessService.isCurrentUserAuthenticated());
+        modelAndView.addObject("client", clientRepository.findAll());
+        return modelAndView;
     }
 }

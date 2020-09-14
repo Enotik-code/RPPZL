@@ -47,8 +47,7 @@
         <div class="form-row">
             <div class="form-group col-md-4">
                 <label for="inputFirstName">Фамилия</label>
-                <input type="text" class="form-control" th:value="${client.getLastName()}" id="inputFirstName"
-                       pattern="/[^\.\,\-\_\@\?\!\:\$ А-Яа-я()]{3,32}" name="input_first_name">
+                <input type="text" class="form-control" th:value="${client.getLastName()}" id="inputFirstName" name="input_first_name">
             </div>
             <div class="form-group col-md-4">
                 <label for="inputSecondName">Имя</label>
@@ -79,8 +78,8 @@
                 <input type="text" class="form-control"  th:value="${client.getMonthlyIncome()}" id="inputAddress" name="input_address">
             </div>
             <div class="form-group col-md-6">
-                <label for="inputBirthday">Дата рождения</label>
-                <input type="date" class="form-control" id="inputBirthday" name="input_birthday">
+                <label for="datePlanted">Дата рождения</label>
+                <input type="text" id="datePlanted" name="datePlanted" th:value="${client.getDateOfBirthday()}">
             </div>
             <div class="form-group col-md-2">
                 <label for="inputGender">Пол</label>
@@ -123,8 +122,8 @@
                 <input type="text" class="form-control" id="inputIssuedBy" th:value="${client.getIssuedBy()}" name="input_issued_by">
             </div>
             <div class="form-group col-md-2">
-                <label for="inputSecondName">Дата выдачи</label>
-                <input type="date" class="form-control" id="inputDateOfIssued" name="input_date_of_issued">
+                <label for="inputDateOfIssue">Дата выдачи</label>
+                <input type="text" id="inputDateOfIssue" name="datePlanted" th:value="${client.getDateOfIssued()}">
             </div>
             <div class="form-group col-md-4">
                 <label for="inputSecondName">Идентификационный номер</label>
@@ -140,7 +139,6 @@
                 <label for="inputSecondName">Должность</label>
                 <input type="text" class="form-control" th:value="${client.getPosition()}" id="inputPosition" >
             </div>
-
         </div>
         <div class="form-row">
             <div class="form-group col-md-1">
@@ -150,6 +148,10 @@
                     <option>Да</option>
                     <option>Нет</option>
                 </select>
+                <div>
+                    <p th:unless="${retireeHaving}">Да</p>
+                    <p th:if="${retireeHaving}">Нет</p>
+                </div>
             </div>
             <div class="form-group col-md-2">
                 <label  for="inlineRadio2">Военнообязанный</label>
@@ -158,6 +160,10 @@
                     <option>Да</option>
                     <option>Нет</option>
                 </select>
+                <div>
+                    <p th:unless="${liableHaving}">Да</p>
+                    <p th:if="${liableHaving}">Нет</p>
+                </div>
             </div>
             <div class="form-group col-md-3">
                 <label for="inputMaritalStatus">Семейное положение</label>
@@ -182,6 +188,10 @@
                     <option class="dropdown-item" th:each="disability : ${disability}"
                             th:text="${disability.getNameDisability()}"></option>
                 </select>
+                <div>
+                    <p th:unless="${disabilityHaving}">Да</p>
+                    <p th:if="${disabilityHaving}">Нет</p>
+                </div>
             </div>
         </div>
         <br>
