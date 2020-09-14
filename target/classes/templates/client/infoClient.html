@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>tochka.bank</title>
+    <style>
+        .wrapper {
+            text-align: center;
+        }
+
+        .button {
+            position: absolute;
+            top: 50%;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/index">bank tochka.</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/index">Home <span class="sr-only"></span></a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <a class="btn btn-outline-success" style="margin-right: 5px;" th:href="@{/signIn}"
+               th:unless="${IS_AUTHENTICATED}">Sign in</a>
+            <a class="btn btn-outline-success" th:href="@{/signUp}" th:unless="${IS_AUTHENTICATED}"> Sign up</a>
+            <a class="btn btn-outline-success" href="/additionalInfo" style="margin-right: 5px;" th:inline="text"
+               th:if="${IS_AUTHENTICATED}">[[${#httpServletRequest.remoteUser}]]</a>
+            <a class="btn btn-outline-success" th:href="@{/logout}" th:if="${IS_AUTHENTICATED}">Logout</a>
+        </form>
+    </div>
+</nav>
+<div class="container-fluid">
+    <br>
+    <h1 class="display-4">Clients</h1>
+    <br>
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Email</th>
+            <th>Phone number</th>
+            <th>Birthday</th>
+            <th>Address</th>
+            <th>More info...</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="client : ${client}">
+            <td th:text="${client.getId()}"></td>
+            <td th:text="${client.getFirstName()}"></td>
+            <td th:text="${client.getLastName()}"></td>
+            <td th:text="${client.getEmail()}"></td>
+            <td th:text="${client.getMobilePhone()}"></td>
+            <td th:text="${client.getDateOfBirthday()}"></td>
+            <td th:text="${client.getAddress()}"></td>
+            <td>Info</td>
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>

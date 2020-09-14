@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>tochka.bank</title>
+    <style>
+        .wrapper {
+            text-align: center;
+        }
+
+        .button {
+            position: absolute;
+            top: 50%;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/index">bank tochka.</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/index">Home <span class="sr-only"></span></a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <a class="btn btn-outline-success" style="margin-right: 5px;" th:href="@{/signIn}"
+               th:unless="${IS_AUTHENTICATED}">Sign in</a>
+            <a class="btn btn-outline-success" th:href="@{/signUp}" th:unless="${IS_AUTHENTICATED}"> Sign up</a>
+            <a class="btn btn-outline-success" href="/additionalInfo" style="margin-right: 5px;" th:inline="text"
+               th:if="${IS_AUTHENTICATED}">[[${#httpServletRequest.remoteUser}]]</a>
+            <a class="btn btn-outline-success" th:href="@{/logout}" th:if="${IS_AUTHENTICATED}">Logout</a>
+        </form>
+    </div>
+</nav>
+<div class="container-fluid">
+    <br>
+    <form th:action="@{/additionalInfo}" th:object="${client}" method="post">
+        <label class="errMessage" th:text="${errorMessage}"></label>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="inputFirstName">Фамилия</label>
+                <input type="text" class="form-control" th:value="${client.getLastName()}" id="inputFirstName"
+                       pattern="/[^\.\,\-\_\@\?\!\:\$ А-Яа-я()]{3,32}" name="input_first_name">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="inputSecondName">Имя</label>
+                <input type="text" class="form-control" id="inputSecondName" th:value="${client.getFirstName()}" pattern="[А-Яа-я- ]{3,32}" name="input_second_name">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="inputPatronymic">Отчество</label>
+                <input type="text" class="form-control" id="inputPatronymic" th:value="${client.getPatronymic()}" pattern="[А-Яа-я- ]{3,32}" name="input_patronymic">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputEmail">Email</label>
+                <input type="email" class="form-control" th:value="${client.getEmail()}" id="inputEmail" name="input_email">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="mobilePhone">Мобильный телефон</label>
+                <input type="text" class="form-control" th:value="${client.getMobilePhone()}" id="mobilePhone" name="mobilePhone">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="homePhone">Домашний телефон</label>
+                <input type="text" class="form-control" th:value="${client.getHomePhone()}" id="homePhone" name="homePhone">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="inputAddress">Ежемесячный доход</label>
+                <input type="text" class="form-control"  th:value="${client.getMonthlyIncome()}" id="inputAddress" name="input_address">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputBirthday">Дата рождения</label>
+                <input type="date" class="form-control" id="inputBirthday" name="input_birthday">
+            </div>
+            <div class="form-group col-md-2">
+                <label for="inputGender">Пол</label>
+                <select id="inputGender" name="input_gender" class="form-control">
+                    <option>Мужской</option>
+                    <option>Женский</option>
+                    <option>Другой</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="inputAddress">Место рождения</label>
+                <input type="text" class="form-control" th:value="${client.getPlaceOfBirthday()}" id="inputPlaceOfBirthday" name="input_address">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="inputAddress">Город факт. проживания</label>
+                <select class="custom-select"  name="cityOfRegistration" id="validatedInputGroupSelectManufacturer" required>
+                    <option class="dropdown-item" th:each="cityOfRegistration : ${cityOfRegistration}"
+                            th:text="${cityOfRegistration.getNameCityRegistration()}"></option>
+                </select>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="inputAddress">Адрес факт. проживания</label>
+                <input type="text" class="form-control" th:value="${client.getPlaceOfResidence()}" id="inputAddres"  name="input_address">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-1">
+                <label for="inputSecondName">Серия</label>
+                <input type="text" class="form-control" th:value="${client.getPassportSeries()}" id="inputPassportSerries" name="input_second_name">
+            </div>
+            <div class="form-group col-md-2">
+                <label for="inputSecondName">Номер</label>
+                <input type="text" class="form-control" th:value="${client.getPassportNumber()}" id="inputPassportNumber"
+                       name="input_second_name">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="inputSecondName">Кем выдан</label>
+                <input type="text" class="form-control" id="inputIssuedBy" th:value="${client.getIssuedBy()}" name="input_issued_by">
+            </div>
+            <div class="form-group col-md-2">
+                <label for="inputSecondName">Дата выдачи</label>
+                <input type="date" class="form-control" id="inputDateOfIssued" name="input_date_of_issued">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="inputSecondName">Идентификационный номер</label>
+                <input type="text" class="form-control" id="inputIdefNum" th:value="${client.getIdentificationNumber()}" name="input_identification_number">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputFirstName">Место работы</label>
+                <input type="text" class="form-control" th:value="${client.getPlaceOfWork()}" id="inputPlaceOfWork">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputSecondName">Должность</label>
+                <input type="text" class="form-control" th:value="${client.getPosition()}" id="inputPosition" >
+            </div>
+
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-1">
+                <label for="inlineRadio1">Пенсионер</label>
+                <select id="inlineRadio1" name="input_" class="form-control">
+                    <option> -</option>
+                    <option>Да</option>
+                    <option>Нет</option>
+                </select>
+            </div>
+            <div class="form-group col-md-2">
+                <label  for="inlineRadio2">Военнообязанный</label>
+                <select id="inlineRadio2" name="input_gender" class="form-control">
+                    <option> -</option>
+                    <option>Да</option>
+                    <option>Нет</option>
+                </select>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="inputMaritalStatus">Семейное положение</label>
+                <select class="custom-select" name="cityOfRegistration" id="inputMaritalStatus"
+                        required>
+                    <option class="dropdown-item" th:each="maritalStatus : ${maritalStatus}"
+                            th:text="${maritalStatus.getNameMaritalStatus()}"></option>
+                </select>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="inputCitizenship">Гражданство</label>
+                <select class="custom-select" name="cityOfRegistration" id="inputCitizenship"
+                        required>
+                    <option class="dropdown-item" th:each="cityzenship : ${citizenship}"
+                            th:text="${cityzenship.getNameCitizenship()}"></option>
+                </select>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="inputDisability">Инвалидность</label>
+                <select class="custom-select" name="cityOfRegistration" id="inputDisability"
+                        required>
+                    <option class="dropdown-item" th:each="disability : ${disability}"
+                            th:text="${disability.getNameDisability()}"></option>
+                </select>
+            </div>
+        </div>
+        <br>
+        <div class="wrapper">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <button href="/index" type="submit" role="button" class="btn btn-success btn-block">Save</button>
+                </div>
+                <div class="form-group col-md-6">
+                    <button href="/signIn" type="submit" role="button" class="btn btn-danger btn-block">Delete account
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<br>
+<h3 class="text-center lead">
+    <a href="/forgotPassword">Forgot your password?</a>
+</h3>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="js/jquery.maskedinput.min.js"></script>
+<script src="https://unpkg.com/imask"></script>
+<script src="../js/script.js"></script>
+</body>
+</html>
