@@ -6,7 +6,6 @@ import by.defolt.authentication.bean.Role;
 import by.defolt.authentication.bean.UserRoles;
 import by.defolt.authentication.repository.ClientRepository;
 import by.defolt.authentication.repository.RoleRepository;
-import by.defolt.config.DatabaseConection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,7 +33,7 @@ public class ClientService {
 
     public Client saveClient(Client client, Optional<UserRoles> userRoleOp) {
         UserRoles newUserRole = userRoleOp.orElseGet(() -> UserRoles.ROLE_GUEST);
-        client.setPassword(bCryptPasswordEncoder.encode(client.getPassword()));
+        //client.setPassword(bCryptPasswordEncoder.encode(client.getPassword()));
         client.setActive(true);
         Role userRole = roleRepository.findByRoleName(newUserRole);
         if (userRole == null) {
@@ -54,7 +53,7 @@ public class ClientService {
         return  String.valueOf(r.nextInt((999999 - 100000) + 1) + 100000);
     }
 
-    public void deactivateUser(Long id) throws SQLException {
+   /* public void deactivateUser(Long id) throws SQLException {
         String query = " update users " +
                 "set users.active = 0 " +
                 "where users.id_client = " + id;
@@ -70,7 +69,7 @@ public class ClientService {
         try (PreparedStatement preparedStatement = DatabaseConection.getDbConnection().prepareStatement(query)) {
             preparedStatement.execute();
         }
-    }
+    }*/
 
     public Client findUserByUserName(String userName) {
         return clientRepository.findClientByUserName(userName);

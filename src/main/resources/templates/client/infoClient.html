@@ -16,6 +16,16 @@
             top: 50%;
         }
     </style>
+    <script src="svg-injector.min.js"></script>
+    <script>
+        var mySVGsToInject = document.querySelectorAll('.iconic-sprite');
+        SVGInjector(mySVGsToInject);
+    </script>
+    <script>
+        $('#modal').on('shown.bs.modal', function () {
+            $('#myInput').trigger('focus')
+        })
+    </script>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -54,7 +64,8 @@
             <th>Phone number</th>
             <th>Birthday</th>
             <th>Address</th>
-            <th>More info...</th>
+            <th>More</th>
+            <th>More</th>
         </tr>
         </thead>
         <tbody>
@@ -66,10 +77,14 @@
             <td th:text="${client.getMobilePhone()}"></td>
             <td th:text="${client.getDateOfBirthday()}"></td>
             <td th:text="${client.getAddress()}"></td>
-            <td>Info</td>
+            <td>
+                <a th:object="${client}" th:href="@{'/info/' + ${client.getId()}}">edit</a>
+            </td>
+            <td>
+                <a th:object="${client}" th:href="@{'/showClient/' + ${client.getId()}}">info</a>
+            </td>
         </tbody>
     </table>
-
 </div>
 </body>
 </html>

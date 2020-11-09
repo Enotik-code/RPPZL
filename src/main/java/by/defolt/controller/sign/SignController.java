@@ -2,9 +2,7 @@ package by.defolt.controller.sign;
 
 import by.defolt.authentication.bean.Client;
 import by.defolt.authentication.repository.ClientRepository;
-import by.defolt.authentication.service.ClientAccessService;
 import by.defolt.authentication.service.ClientService;
-import by.defolt.mail.MailEngine;
 import by.defolt.validate.UserValidate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -73,9 +71,9 @@ public class SignController {
         if (UserValidate.checkValidateDataUser(newClient) &&
                 (!confPassword.isPresent() || newClient.getPassword().equals(confPassword.get()))) {
             clientService.saveClient(newClient, Optional.empty());
-            clientService.deactivateUser(newClient.getId());
+            //clientService.deactivateUser(newClient.getId());
             mod.setViewName("sign/signUp");
-            return new ModelAndView("redirect:/infoClient");
+            return new ModelAndView("redirect:/infoClients");
         }
         return mod;
     }
